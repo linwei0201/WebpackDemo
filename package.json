@@ -1,0 +1,35 @@
+{
+  "name": "Webpack-Best-Practice",
+  "version": "0.0.1",
+  "description": "Wepack best practise",
+  "scripts": {
+    "start": "ENVIRONMENT=development webpack --progress --colors --watch --config ./webpack/config.dev.js",
+    "build": "ENVIRONMENT=production webpack --progress --colors --config ./webpack/config.prod.js"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "autoprefixer-loader": "^3.2.0",
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.1.1",
+    "babel-plugin-transform-object-assign": "^6.22.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "css-loader": "^0.28.4",
+    "file-loader": "^0.11.2",
+    "json-loader": "^0.5.7",
+    "less": "^2.7.2",
+    "less-loader": "^4.0.5",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-router-dom": "^4.1.2",
+    "style-loader": "^0.18.2",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.1",
+    "url-loader": "^0.5.9",
+    "webpack": "^3.3.0"
+  },
+  "devDependencies": {
+    "webpack-dev-server": "^2.6.1"
+  }
+}
