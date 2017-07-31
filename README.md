@@ -219,9 +219,40 @@ compiler.run(function(err, stats) {
 });
 ```
 
+##### 2.6 Module Resolution模块解析
+在解析模块时，webpack使用Enhanced-resolver，可以支持以下三种类型的模块路径
+- 绝对路径
+```js
+import "/home/me/file";
 
-##### 2.5 Modules
-##### 2.6 Module Resolution
+import "C:\\Users\\me\\file";
+```
+- 相对路径
+```js
+import "../src/file1";
+import "./file2";
+```
+- 模块路径
+```js
+import "module";
+import "module/lib/file";
+```
+
+> 模块将在 resolve.modules 中指定的所有目录内搜索。 你可以替换初始模块路径，此替换路径通过使用 resolve.alias 配置选项来创建一个别名。
+
+**loader解析规则**
+- 如果路径指向一个文件：
+
+     - 如果路径具有文件扩展名，则被直接将文件打包。
+     - 否则，将使用 [resolve.extensions] 选项作为文件扩展名来解析，此选项告诉解析器在解析中能够接受哪些扩展名（例如 .js, .jsx）。
+
+- 如果路径指向一个文件夹，按以下步骤找到具有正确扩展名的正确文件：
+
+    - 如果文件夹中包含 package.json 文件，则按照顺序查找 resolve.mainFields 配置选项中指定的字段。并且 package.json 中的第一个这样的字段确定文件路径。
+    - 如果 package.json 文件不存在或者 package.json 文件中的 main 字段没有返回一个有效路径，则按照顺序查找 resolve.mainFiles 配置选项中指定的文件名，看是否能在 import/require 目录下匹配到一个存在的文件名。
+    - 文件扩展名通过 resolve.extensions 选项采用类似的方法进行解析。
+
+
 ##### 2.7 Dependency Graph
 ##### 2.8 Manifest
 ##### 2.9 Targets
