@@ -1,13 +1,14 @@
-var config = require("./config.dev.js");
-var webpack = require('webpack');
-var WebpackDevServer = require('webpack-dev-server');
+var config = require("./config.dev.js"),
+    path = require("path"),
+    webpack = require('webpack'),
+    WebpackDevServer = require('webpack-dev-server');
 
 
 var compiler = webpack(config);
 var server = new WebpackDevServer(compiler, {
     // webpack-dev-server options
 
-  // contentBase: './dist',
+  // contentBase: path.join(__dirname, '../dist'),
   // Can also be an array, or: contentBase: "http://localhost/",
 
   hot: true,
@@ -27,9 +28,9 @@ var server = new WebpackDevServer(compiler, {
   // Use "**" to proxy all paths to the specified server.
   // This is useful if you want to get rid of 'http://localhost:8080/' in script[src],
   // and has many other use cases (see https://github.com/webpack/webpack-dev-server/pull/127 ).
-  /*proxy: {
-    "**": "http://localhost:8080"
-  },*/
+  proxy: {
+    "**": "http://localhost:8888/dist"
+  },
 
   setup: function(app) {
     // Here you can access the Express app object and add your own custom middleware to it.
@@ -46,16 +47,19 @@ var server = new WebpackDevServer(compiler, {
   // webpack-dev-middleware options
   quiet: false,
   noInfo: false,
-  lazy: true,
-  filename: "bundle.js",
+  // lazy: true,
+  // filename: "bundle.js",
   watchOptions: {
     aggregateTimeout: 300,
     poll: 1000
   },
   // It's a required option.
-  // publicPath: "http://127.0.0.1:8080/dist/",
+  publicPath: "http://127.0.0.1:8888/dist/",
   headers: { "X-Custom-Header": "yes" },
   stats: { colors: true },
   inline: true
 });
-server.listen(8080);
+server.listen(8888, 'localhost', function(){
+  console.log("dev server started at http://127.0.0.1:8888");
+  console.log("static resources are available at http://127.0.0.1:8888/dist/");
+});

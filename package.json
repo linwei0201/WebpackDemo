@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Wepack best practise",
   "scripts": {
-    "start": "ENVIRONMENT=development webpack --progress --colors --watch --config ./webpack/config.dev.js",
+    "start": "ENVIRONMENT=development node webpack/server.js",
     "build": "ENVIRONMENT=production webpack --progress --colors --config ./webpack/config.prod.js"
   },
   "license": "ISC",
@@ -17,6 +17,7 @@
     "babel-preset-stage-2": "^6.24.1",
     "css-loader": "^0.28.4",
     "file-loader": "^0.11.2",
+    "html-webpack-plugin": "^2.29.0",
     "json-loader": "^0.5.7",
     "less": "^2.7.2",
     "less-loader": "^4.0.5",
