@@ -171,6 +171,55 @@ resolveLoader可以修改loader解析的配置，默认值如下
 ```
 
 ##### 2.4 Plugins
+
+插件可以在webpack编译的任何生命周期执行，用来解决loader无法处理的事情，比如创建全局变量，提取css为独立文件，等。[官方文档](https://doc.webpack-china.org/development/how-to-write-a-plugin/ "如何编写插件")详细介绍了如何编写一个webpack插件
+
+**插件的运行方式**
+- webpack配置文件
+
+```js
+const HtmlWebpackPlugin = require('html-webpack-plugin'); //通过 npm 安装
+const webpack = require('webpack'); //访问内置的插件
+const path = require('path');
+
+const config = {
+  entry: './path/to/my/entry/file.js',
+  output: {
+    filename: 'my-first-webpack.bundle.js',
+    path: path.resolve(__dirname, 'dist')
+  },
+  module: {
+    loaders: [
+      {
+        test: /\.(js|jsx)$/,
+        use: 'babel-loader'
+      }
+    ]
+  },
+  plugins: [
+    new webpack.optimize.UglifyJsPlugin(),
+    new HtmlWebpackPlugin({template: './src/index.html'})
+  ]
+};
+
+module.exports = config;
+```
+
+- node api
+
+```js
+const webpack = require('webpack'); //访问 webpack 运行时(runtime)
+const configuration = require('./webpack.config.js');
+
+let compiler = webpack(configuration);
+compiler.apply(new webpack.ProgressPlugin());
+
+compiler.run(function(err, stats) {
+// ...
+});
+```
+
+
 ##### 2.5 Modules
 ##### 2.6 Module Resolution
 ##### 2.7 Dependency Graph
