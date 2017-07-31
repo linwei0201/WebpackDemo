@@ -1,18 +1,22 @@
-## webpack使用指南
+---
+createTime : 2017/07/31
+author : Wei Lin
+title : Webpack常用配置及实践
+subtitle: 了解典型常用的webpack配置
+---
 
-### 配置文件
-#### 1. es2015模块支持
+## 1. es2015模块支持
 ES6的import和export，webpack是支持的，但是其他ES6的功能，需要安装babel解析器来解析。
 System.import
-#### 2. 配置文件
+## 2. 配置文件
 webpack会默认使用名为webpack.config.js的配置文件，也可以在命令行中通过--config来传递参数，表名配置文件的文件名。一般我们为了区分环境，会拆分成3类配置文件
 - 开发环境config.dev.js，一般配合webpack-dev-server使用
 - 测试环境config.test.js
 - 生产环境config.prod.js
 
-##### 2.1 Entry
+### 2.1 Entry
 入口有多种写法，以下一一介绍
-###### - 单入口
+#### - 单入口
 **语法**
 ```js
 entry: string | Object
@@ -21,20 +25,20 @@ entry: string | Object
 **webpack.config.js**
 ```js
 module.exports = {
-	entry: "pages/aaa.js"
+  entry: "pages/aaa.js"
 }
 ```
 等同于
 
 ```js
 module.exports = {
-	entry: { 
-		"main": "pages/aaa.js"
-	}
+  entry: {
+    "main": "pages/aaa.js"
+  }
 }
 ```
 
-###### - 多入口
+#### - 多入口
 **语法**
 ```js
 entry: {[entryChunkName: string]: string|Array<string>} | Array<string>
@@ -44,17 +48,17 @@ entry: {[entryChunkName: string]: string|Array<string>} | Array<string>
 
 ```js
 module.exports = {
-	entry: {
-		app: 'src/pages/app.js',
-		vendor: 'src/vendors.js'
-	}
+  entry: {
+    app: 'src/pages/app.js',
+    vendor: 'src/vendors.js'
+  }
 }
 ```
 
 > **当你向 entry 传入一个数组时会发生什么？**
 向 entry 属性传入「文件路径(file path)数组」将创建“多个主入口(multi-main entry)”。在你想要多个依赖文件一起注入，并且将它们的依赖导向(graph)到一个“chunk”时，传入数组的方式就很有用。
 
-##### 2.2 Output
+### 2.2 Output
 
 output用来配置webpack编译后的文件的写入规则，**就算有多个entry配置，output配置也只有一个**。
 
@@ -62,10 +66,10 @@ output用来配置webpack编译后的文件的写入规则，**就算有多个en
 
 ```js
 module.exports = {
-	output: {
-		filename: 'bundle.js',   //用于输出文件的文件名
-		path: '/dist/assets'     //目标输出目录 path 的绝对路径
-	}
+  output: {
+    filename: 'bundle.js',   //用于输出文件的文件名
+    path: '/dist/assets'     //目标输出目录 path 的绝对路径
+  }
 }
 ```
 
@@ -73,16 +77,16 @@ module.exports = {
 **多入口输出配置**
 如果配置了多入口，输出应该有标识符来区别
 ```js
-	module.exports = {
-		entry: {
-			app: 'src/pages/app.js',
-			vendor: 'src/pages/vendor.js'
-		},
-		output: {
-			filename: '[name].js',
-			path: __dirname + '/dist'
-		}
-	}
+  module.exports = {
+    entry: {
+      app: 'src/pages/app.js',
+      vendor: 'src/pages/vendor.js'
+    },
+    output: {
+      filename: '[name].js',
+      path: __dirname + '/dist'
+    }
+  }
 ```
 
 编译后生成
@@ -94,15 +98,15 @@ module.exports = {
 
 ```js
 module.exports = {
-	output: {
-		publicPath: 'http://cdn.example.com/assets/[hash]/'
-	}
+  output: {
+    publicPath: 'http://cdn.example.com/assets/[hash]/'
+  }
 }
 ```
 
 > 如果编译时不知道js的运行环境，可以在入口js中获取当前js的域名，并赋值给__webpack_public_path__
 
-##### 2.3 Loader
+### 2.3 Loader
 
 由于webpack只能识别.js文件，所以其他格式的文件都需要通过loader进行转换，转换成js，再使用webpack编译。
 
@@ -116,7 +120,7 @@ webpack提供了3种方式使用loader：
 本文只介绍第一种方式，例如，css-loader，首先要用npm安装
 
 ```bash
-	npm i css-loader --save
+  npm i css-loader --save
 ```
 
 然后在配置文件中设置, .css结尾的文件，都使用css-loader解析
@@ -135,17 +139,17 @@ module.exports = {
 
 ```js
 module.exports = {
-	module: {
-		rules: [
-			{ loader: 'style-loader' },
-			{
-				loader: 'css-loader',
-				options: {
-					modules: true  //loader的查询参数
-				}
-			}
-		]
-	}
+  module: {
+    rules: [
+      { loader: 'style-loader' },
+      {
+        loader: 'css-loader',
+        options: {
+          modules: true  //loader的查询参数
+        }
+      }
+    ]
+  }
 }
 ```
 
@@ -170,7 +174,7 @@ resolveLoader可以修改loader解析的配置，默认值如下
 }
 ```
 
-##### 2.4 Plugins
+### 2.4 Plugins
 
 插件可以在webpack编译的任何生命周期执行，用来解决loader无法处理的事情，比如创建全局变量，提取css为独立文件，等。[官方文档](https://doc.webpack-china.org/development/how-to-write-a-plugin/ "如何编写插件")详细介绍了如何编写一个webpack插件
 
@@ -219,7 +223,7 @@ compiler.run(function(err, stats) {
 });
 ```
 
-##### 2.6 Module Resolution模块解析
+### 2.6 Module Resolution模块解析
 在解析模块时，webpack使用Enhanced-resolver，可以支持以下三种类型的模块路径
 - 绝对路径
 ```js
@@ -253,19 +257,19 @@ import "module/lib/file";
     - 文件扩展名通过 resolve.extensions 选项采用类似的方法进行解析。
 
 
-##### 2.7 Dependency Graph
+### 2.7 Dependency Graph
 
 webpack 从命令行或配置文件中定义的一个模块列表开始，处理你的应用程序。 从这些入口起点开始，webpack 递归地构建一个依赖图，这个依赖图包含着应用程序所需的每个模块，然后将所有这些模块打包为少量的 bundle - 通常只有一个 - 可由浏览器加载。
 
 > 对于 HTTP/1.1 客户端，由 webpack 打包你的应用程序会尤其强大，因为在浏览器发起一个新请求时，它能够减少应用程序必须等待的时间。对于 HTTP/2，你还可以使用代码拆分(Code Splitting)以及通过 webpack 打包来实现最佳优化。
 
-##### 2.8 Manifest
-##### 2.9 Targets
+### 2.8 Manifest
+### 2.9 Targets
 因为服务器和浏览器代码都可以用 JavaScript 编写，所以 webpack 提供了多种构建目标(target)，你可以在你的 webpack 配置中设置。
 
 可以设置node（使用node语法编译）或者web，默认是web。
 
-##### 2.10 Hot Module Replacement
+### 2.10 Hot Module Replacement
 模块热替换(HMR - Hot Module Replacement)功能会在应用程序运行过程中替换、添加或删除模块，而无需重新加载整个页面。主要是通过以下几种方式，来显著加快开发速度：
 - 保留在完全重新加载页面时丢失的应用程序状态。
 - 只更新变更内容，以节省宝贵的开发时间。
@@ -273,7 +277,7 @@ webpack 从命令行或配置文件中定义的一个模块列表开始，处理
 
 开发环境下，一般结合webpack-dev-server 和 HMR来实现模块热加载。
 
-#### 3. NPM脚本
+## 3. NPM脚本
 一般，在package.json文件中写对应的脚本来分别运行不同环境下的构建。
 
 ```js
@@ -281,7 +285,7 @@ webpack 从命令行或配置文件中定义的一个模块列表开始，处理
   ...
   "scripts": {
     "start": "ENVIRONMENT=development webpack --progress --colors --watch --config ./webpack/config.dev.js",
-	"build": "ENVIRONMENT=production webpack --progress --colors --config ./webpack/config.prod.js"
+  "build": "ENVIRONMENT=production webpack --progress --colors --config ./webpack/config.prod.js"
   },
   ...
 }
