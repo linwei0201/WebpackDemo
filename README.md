@@ -254,9 +254,25 @@ import "module/lib/file";
 
 
 ##### 2.7 Dependency Graph
+
+webpack 从命令行或配置文件中定义的一个模块列表开始，处理你的应用程序。 从这些入口起点开始，webpack 递归地构建一个依赖图，这个依赖图包含着应用程序所需的每个模块，然后将所有这些模块打包为少量的 bundle - 通常只有一个 - 可由浏览器加载。
+
+> 对于 HTTP/1.1 客户端，由 webpack 打包你的应用程序会尤其强大，因为在浏览器发起一个新请求时，它能够减少应用程序必须等待的时间。对于 HTTP/2，你还可以使用代码拆分(Code Splitting)以及通过 webpack 打包来实现最佳优化。
+
 ##### 2.8 Manifest
 ##### 2.9 Targets
+因为服务器和浏览器代码都可以用 JavaScript 编写，所以 webpack 提供了多种构建目标(target)，你可以在你的 webpack 配置中设置。
+
+可以设置node（使用node语法编译）或者web，默认是web。
+
 ##### 2.10 Hot Module Replacement
+模块热替换(HMR - Hot Module Replacement)功能会在应用程序运行过程中替换、添加或删除模块，而无需重新加载整个页面。主要是通过以下几种方式，来显著加快开发速度：
+- 保留在完全重新加载页面时丢失的应用程序状态。
+- 只更新变更内容，以节省宝贵的开发时间。
+- 调整样式更加快速 - 几乎相当于在浏览器调试器中更改样式。
+
+开发环境下，一般结合webpack-dev-server 和 HMR来实现模块热加载。
+
 #### 3. NPM脚本
 一般，在package.json文件中写对应的脚本来分别运行不同环境下的构建。
 
