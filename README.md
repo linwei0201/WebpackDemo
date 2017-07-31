@@ -1,9 +1,4 @@
----
-createTime : 2017/07/31
-author : Wei Lin
-title : Webpack常用配置及实践
-subtitle: 了解典型常用的webpack配置
----
+
 
 ## 1. es2015模块支持
 ES6的import和export，webpack是支持的，但是其他ES6的功能，需要安装babel解析器来解析。
