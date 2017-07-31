@@ -89,7 +89,87 @@ module.exports = {
 - ./dist/app.js
 - ./dist/vendor.js
 
+**publicPath**
+项目访问静态资源的前缀，如果不使用cdn，可忽略，默认使用相对路径。如果使用cdn，可在pulicPath配置成cdn路径
+
+```js
+module.exports = {
+	output: {
+		publicPath: 'http://cdn.example.com/assets/[hash]/'
+	}
+}
+```
+
+> 如果编译时不知道js的运行环境，可以在入口js中获取当前js的域名，并赋值给__webpack_public_path__
+
 ##### 2.3 Loader
+
+由于webpack只能识别.js文件，所以其他格式的文件都需要通过loader进行转换，转换成js，再使用webpack编译。
+
+> loader可以允许我们在js中引入任何格式的文件，只要有相应的loader即可。例如css，图片等
+
+webpack提供了3种方式使用loader：
+- 通过配置文件，这也是官方最推荐的方式
+- 内联，通过import语句中指定使用的loader（不推荐）
+- CLI方式：在shell命令中指定loader（不推荐）
+
+本文只介绍第一种方式，例如，css-loader，首先要用npm安装
+
+```bash
+	npm i css-loader --save
+```
+
+然后在配置文件中设置, .css结尾的文件，都使用css-loader解析
+
+```js
+module.exports = {
+  module: {
+    rules: [
+      { test: /\.css$/, use: 'css-loader' }
+    ]
+  }
+};
+```
+
+多个loader以及带参数的loader
+
+```js
+module.exports = {
+	module: {
+		rules: [
+			{ loader: 'style-loader' },
+			{
+				loader: 'css-loader',
+				options: {
+					modules: true  //loader的查询参数
+				}
+			}
+		]
+	}
+}
+```
+
+**loader特性**
+- loader 支持链式传递，执行顺序是根据定义从后往前执行，第一个 loader 返回值给下一个 loader。最后一个 loader，返回 webpack 所预期的 js。(如上例中，会先执行css-loader，再把结果传给style-loader，最后输出js)
+- loader 可以是同步的，也可以是异步的。
+- loader 运行Node.js环境中。
+- loader 接受参数，可以?modules=true配置，也可用options字段配置（如上例）。
+- 除了使用 package.json 常见的 main 属性，还可以将普通的 npm 模块导出为 loader，做法是在 package.json 里定义一个 loader 字段。
+
+loader可以为webpack提供很多功能，如何编写loader见[官方文档](https://doc.webpack-china.org/development/how-to-write-a-loader "如何编写loader")
+
+**resolveLoader**
+
+resolveLoader可以修改loader解析的配置，默认值如下
+
+```js
+{
+    modules: ["node_modules"],    //编辑器查找loader的路径，可以在此添加本地loader的路径
+    extensions: [".js", ".json"],
+    mainFields: ["loader", "main"]
+}
+```
+
 ##### 2.4 Plugins
 ##### 2.5 Modules
 ##### 2.6 Module Resolution
